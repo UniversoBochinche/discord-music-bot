@@ -4,9 +4,9 @@ import subprocess
 from utils.ytdl_utils import ytdl
 from config import FFMPEG_OPTIONS
 
-class YoutubeSource(discord.PCMVolumeTransformer):
-    def __init__(self, source, *, data, volume=0.5):
-        super().__init__(source, volume)
+class YoutubeSource(discord.FFmpegOpusAudio):
+    def __init__(self, source, *, data):
+        super().__init__(source, **FFMPEG_OPTIONS)
         self.data = data
         self.title = data.get('title')
         self.url = data.get('url')
@@ -31,5 +31,4 @@ class YoutubeSource(discord.PCMVolumeTransformer):
         else:
             filename = ytdl.prepare_filename(data)
 
-        audio_source = discord.FFmpegPCMAudio(filename, stderr=subprocess.DEVNULL, **FFMPEG_OPTIONS)
-        return cls(audio_source, data=data)
+        return cls(filename, data=data)
