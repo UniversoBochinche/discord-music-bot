@@ -15,10 +15,17 @@ class YoutubeSource(discord.FFmpegOpusAudio):
         loop = loop or asyncio.get_event_loop()
 
         ytdl_params = {
-            'format': 'bestaudio[abr<=64]/bestaudio',
+            'format': 'worstaudio[abr<=64]/bestaudio',
             'noplaylist': True,
             'quiet': True,
             'no_warnings': True,
+            'socket_timeout': 2,
+            'noprogress': True,
+            'extractor_args': {
+                'youtube': {
+                    'skip': ['dash', 'hls']  # Avoid complex formats
+                }
+            }
         }
 
         def extract_info():
