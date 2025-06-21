@@ -1,3 +1,7 @@
+import logging
+logging.getLogger('discord').setLevel(logging.CRITICAL)
+logging.getLogger('yt_dlp').setLevel(logging.CRITICAL)
+
 from bot import setup_bot
 from config import DISCORD_TOKEN
 

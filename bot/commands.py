@@ -36,29 +36,28 @@ class Commands(commands.Cog):
                 return
 
         try:
-            async with ctx.typing():
-                if vc.is_playing() or vc.is_paused():
-                    await ctx.send("Already playing a song. Adding to queue.")
-                    self.queue_manager.add_to_queue(ctx.guild.id, url)
+            if vc.is_playing() or vc.is_paused():
+                await ctx.send("Already playing a song. Adding to queue.")
+                self.queue_manager.add_to_queue(ctx.guild.id, url)
+                return
+
+            player = await YoutubeSource.from_url(url, loop=self.bot.loop, stream=True)
+
+            async def song_finished(self, ctx):
+                vc = ctx.guild.voice_client
+
+                if not vc or not vc.is_connected():
+                    self.queue_manager.clear_queue(ctx.guild.id)
                     return
 
-                player = await YoutubeSource.from_url(url, loop=self.bot.loop, stream=True)
+                next_song = self.queue_manager.get_next_item(ctx.guild.id)
 
-                async def song_finished(self, ctx):
-                    vc = ctx.guild.voice_client
+                if next_song:
+                    await self.play(ctx, next_song)
 
-                    if not vc or not vc.is_connected():
-                        self.queue_manager.clear_queue(ctx.guild.id)
-                        return
-
-                    next_song = self.queue_manager.get_next_item(ctx.guild.id)
-
-                    if next_song:
-                        await self.play(ctx, next_song)
-
-                vc.play(player, after=lambda e: self.bot.loop.create_task(
-                    song_finished(self, ctx)
-                ))
+            vc.play(player, after=lambda e: self.bot.loop.create_task(
+                song_finished(self, ctx)
+            ))
 
             await ctx.send(f"**Now playing:** {player.title}")
         except Exception as e:
