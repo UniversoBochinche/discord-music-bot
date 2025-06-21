@@ -23,7 +23,7 @@ class QueueManager:
         return self.ensure_guild_queue(guild_id)
 
     def clear_queue(self, guild_id: int):
-        if self.queue[guild_id]:
+        if guild_id in self.queue:
             self.queue[guild_id].clear()
 
     def ensure_guild_queue(self, guild_id: int) -> List[str]:

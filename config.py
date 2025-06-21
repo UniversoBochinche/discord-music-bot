@@ -10,5 +10,6 @@ BOT_PREFIX = '!'
 
 # FFmpeg configuration
 FFMPEG_OPTIONS = {
-    'options': '-vn'
+    'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
+    'options': '-vn -ac 2 -ar 48000 -b:a 48k -threads 1'
 }
