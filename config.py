@@ -11,5 +11,5 @@ BOT_PREFIX = '!'
 # FFmpeg configuration
 FFMPEG_OPTIONS = {
     'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
-    'options': '-vn -ac 2 -ar 48000 -b:a 64k -c:a libopus -application audio -filter:a "aresample=48000" -threads 1'
+    'options': '-vn -ac 2 -ar 48000 -b:a 64k -c:a libopus -application audio -threads 1'
 }

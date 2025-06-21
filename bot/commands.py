@@ -1,3 +1,4 @@
+import asyncio
 from discord.ext import commands
 from bot.queue_manager import QueueManager
 from bot.youtube_source import YoutubeSource
@@ -55,6 +56,7 @@ class Commands(commands.Cog):
                 if next_song:
                     await self.play(ctx, next_song)
 
+            await asyncio.sleep(0.5)
             vc.play(player, after=lambda e: self.bot.loop.create_task(
                 song_finished(self, ctx)
             ))

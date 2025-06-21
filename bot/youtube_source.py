@@ -1,7 +1,6 @@
 import discord
 import asyncio
-import subprocess
-from utils.ytdl_utils import ytdl
+import yt_dlp as ytdl
 from config import FFMPEG_OPTIONS
 
 class YoutubeSource(discord.FFmpegOpusAudio):
@@ -15,8 +14,16 @@ class YoutubeSource(discord.FFmpegOpusAudio):
     async def from_url(cls, url, *, loop=None, stream=True):
         loop = loop or asyncio.get_event_loop()
 
+        ytdl_params = {
+            'format': 'bestaudio[abr<=64]/bestaudio',
+            'noplaylist': True,
+            'quiet': True,
+            'no_warnings': True,
+        }
+
         def extract_info():
-            return ytdl.extract_info(url, download=not stream)
+            with ytdl.YoutubeDL(ytdl_params) as temp_ytdl:
+                return temp_ytdl.extract_info(url, download=not stream)
 
         data = await loop.run_in_executor(None, extract_info)
 
