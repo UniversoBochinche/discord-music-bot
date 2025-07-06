@@ -1,8 +1,16 @@
-import os
 from dotenv import load_dotenv
+import os
+import sys
 
-# Load environment variables
-load_dotenv()
+# Get the directory where the executable is located
+if getattr(sys, 'frozen', False):
+    app_dir = os.path.dirname(sys.executable)
+else:
+    app_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Point to the .env file next to the executable
+dotenv_path = os.path.join(app_dir, ".env")
+load_dotenv(dotenv_path)
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
 # Discord bot configuration

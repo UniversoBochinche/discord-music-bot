@@ -3,3 +3,4 @@ python-dotenv
 yt-dlp
 legacy-cgi
 PyNaCl
+pyinstaller
